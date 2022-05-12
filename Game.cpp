@@ -11,8 +11,9 @@
 //  is_key_pressed(int button_vk_code) - check if a key is pressed,
 //                                       use keycodes (VK_SPACE, VK_RIGHT, VK_LEFT, VK_UP, VK_DOWN, VK_RETURN)
 //
+//  get_cursor_x(), get_cursor_y() - get mouse cursor position
+//  is_mouse_button_pressed(int button) - check if mouse button is pressed (0 - left button, 1 - right button)
 //  schedule_quit_game() - quit game after act()
-
 
 
 // initialize game data in this function

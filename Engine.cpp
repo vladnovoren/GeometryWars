@@ -33,6 +33,9 @@ static XClassHint * classhint = NULL;
 static XWMHints * wmhints = NULL;
 static XSizeHints * sizehints = NULL;
 static char title[] = "game";
+static int mouse_x = 0;
+static int mouse_y = 0;
+static bool mouse_btn_down[5] = { 0 };
 
 static void term_sig_handler(int)
 {
@@ -44,6 +47,21 @@ bool is_key_pressed(int button_vk_code)
   if (unsigned(button_vk_code) >= VK__COUNT)
     return false;
   return keys[button_vk_code];
+}
+
+bool is_mouse_button_pressed(int mouse_button)
+{
+  return mouse_btn_down[mouse_button];
+}
+
+int get_cursor_x()
+{
+  return mouse_x;
+}
+
+int get_cursor_y()
+{
+  return mouse_y;
 }
 
 static void on_key_event(XKeyEvent & event, bool pressed)
@@ -121,7 +139,7 @@ int main(int, const char **)
 
   pixmap = XCreatePixmap(display, window, SCREEN_WIDTH, SCREEN_HEIGHT, 24);
 
-  XSelectInput(display, window, ExposureMask | KeyPressMask | KeyReleaseMask);
+  XSelectInput(display, window, ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask);
   XMapWindow(display, window);
   wmDeleteMessage = XInternAtom(display, "WM_DELETE_WINDOW", false);
   XSetWMProtocols(display, window, &wmDeleteMessage, 1);
@@ -151,8 +169,25 @@ int main(int, const char **)
       if (event.type == KeyRelease)
         on_key_event(event.xkey, false);
 
+      if (event.type == ButtonPress && event.xbutton.button > 0 && event.xbutton.button <= 5)
+        mouse_btn_down[event.xbutton.button - 1] = true;
+
+      if (event.type == ButtonRelease && event.xbutton.button > 0 && event.xbutton.button <= 5)
+        mouse_btn_down[event.xbutton.button - 1] = false;
+
       if (event.type == ClientMessage && event.xclient.data.l[0] == (int)wmDeleteMessage)
         quit = true;
+
+      Window root_return, child_return;
+      int root_x_return, root_y_return;
+      int win_x_return, win_y_return;
+      unsigned int mask_return;
+      if (XQueryPointer(display, window, &root_return, &child_return, &root_x_return, &root_y_return,
+        &win_x_return, &win_y_return, &mask_return))
+      {
+        mouse_x = win_x_return;
+        mouse_y = win_y_return;
+      }
     }
 
     uint64_t curTime = get_nsec();

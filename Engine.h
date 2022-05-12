@@ -27,6 +27,9 @@ enum
 
 // VK_SPACE, VK_RIGHT, VK_LEFT, VK_UP, VK_DOWN, etc.
 bool is_key_pressed(int button_vk_code);
+bool is_mouse_button_pressed(int mouse_button);
+int get_cursor_x();
+int get_cursor_y();
 
 void initialize();
 void finalize();
