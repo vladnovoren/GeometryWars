@@ -15,6 +15,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <sched.h>
+#include <iostream>
 
 uint32_t buffer[SCREEN_HEIGHT][SCREEN_WIDTH] = { 0 };
 
@@ -195,8 +196,9 @@ int main(int, const char **)
       continue;
 
     float dt = float(double(curTime - prevTime) * 1e-9);
-    if (dt > 0.1f)
-      dt = 0.1f;
+    std::cout << dt << '\n';
+//    if (dt > 0.1f)
+//      dt = 0.1f;
     act(dt);
     prevTime = curTime;
 

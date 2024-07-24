@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <cmath>
 #include <SFML/Graphics.hpp>
+#include "Gameplay/Systems.hpp"
 
 #include <stdio.h>
 
@@ -20,10 +21,21 @@
 //  is_mouse_button_pressed(int button) - check if mouse button is pressed (0 - left button, 1 - right button)
 //  schedule_quit_game() - quit game after act()
 
+World world;
 
 // initialize game data in this function
 void initialize()
 {
+  world.AddSystem<PhysicsSystem>();
+  world.AddSystem<RenderSystem>();
+
+  auto player_ent = world.CreateEntity();
+  world.SetComponent(player_ent, PlayerTag{});
+  world.SetComponent(player_ent, Position{Vector2i(100, 100)});
+//  world.SetComponent(player_ent, CircleShape{IntCircle(0, 0, 20)});
+  world.SetComponent(player_ent, RectShape{IntRect(-10, -10, 20, 20)});
+  world.SetComponent(player_ent, Color{ColorBGRA(255, 0, 0, 255)});
+  world.SetComponent(player_ent, Velocity{Vector2i(150, 0)});
 }
 
 // this function is called to update game data,
@@ -32,7 +44,7 @@ void act(float dt)
 {
   if (is_key_pressed(VK_ESCAPE))
     schedule_quit_game();
-
+  world.Update(dt);
 }
 
 sf::Color blendColors(const sf::Color& src, const sf::Color& dst) {
@@ -57,39 +69,7 @@ sf::Color blendColors(const sf::Color& src, const sf::Color& dst) {
 void draw()
 {
   // clear backbuffer
-  memset(buffer, 182736, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(uint32_t));
-  auto load = []() {
-    sf::Texture texture;
-    if (!texture.loadFromFile("resources/spaceship.png")) {
-      assert(false);
-    }
-    return texture;
-  };
-
-  auto texture = load();
-
-  angle += d_angle;
-  sf::Sprite sprite(texture);
-  sprite.setRotation(angle);
-
-  sf::Vector2u newSize = calculateRotatedSize(sprite);
-  
-  sf::RenderTexture renderTexture;
-  renderTexture.create(newSize.x, newSize.y);
-  renderTexture.clear(sf::Color::Transparent);
-
-  sf::View view(sf::FloatRect(0, 0, newSize.x, newSize.y));
-  renderTexture.setView(view);
-
-  sprite.setPosition((float)newSize.x / 2, (float)newSize.y / 2);
-  sprite.setOrigin((float)texture.getSize().x / 2, (float)texture.getSize().y / 2);
-
-  renderTexture.draw(sprite);
-  renderTexture.display();
-
-  auto rotated_image = renderTexture.getTexture().copyToImage();
-
-  blendImageIntoBuffer(rotated_image, buffer, sf::Vector2i(200, 200));
+//  memset(buffer, 0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(uint32_t));
 }
 
 // free game data in this function
