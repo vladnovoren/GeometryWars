@@ -1,0 +1,3 @@
+[submodule "sigslot"]
+	path = sigslot
+	url = git@github.com:palacaze/sigslot.git

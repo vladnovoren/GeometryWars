@@ -196,9 +196,9 @@ int main(int, const char **)
       continue;
 
     float dt = float(double(curTime - prevTime) * 1e-9);
-    std::cout << dt << '\n';
-//    if (dt > 0.1f)
-//      dt = 0.1f;
+//    std::cout << dt << '\n';
+    if (dt > 0.1f)
+      dt = 0.1f;
     act(dt);
     prevTime = curTime;
 

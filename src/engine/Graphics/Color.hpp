@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 
+namespace engine::graphics {
 using ColorCompT = uint8_t;
 using ColorT = uint32_t;
 
@@ -14,8 +15,9 @@ struct ColorBGRA {
 
   ColorBGRA() = default;
 
-  ColorBGRA(ColorCompT b, ColorCompT g, ColorCompT r,
-            ColorCompT a);
+  ColorBGRA(ColorCompT b, ColorCompT g, ColorCompT r, ColorCompT a);
 
-  [[nodiscard]] ColorT GetIntColor() const;
+  [[nodiscard]] ColorT GetUIntColor() const;
+  [[nodiscard]] int GetIntColor() const;
 };
+}  // namespace engine::graphics

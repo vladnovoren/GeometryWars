@@ -67,6 +67,8 @@ public:
 
   [[nodiscard]] double Length() const { return sqrt(x * x + y * y); }
 
+  [[nodiscard]] double LengthSqr() const { return x * x + y * y; }
+
   Vector2 GetProjection(const Vector2 &direction) {
     Vector2 dir_normalized = direction;
     dir_normalized.Normalize();

@@ -2,6 +2,7 @@
 
 #include "Primitives.hpp"
 #include "Graphics/Color.hpp"
+#include "Collisions.hpp"
 
 struct PlayerTag{};
 
@@ -12,19 +13,19 @@ struct Health {
 };
 
 struct Position {
-  Vector2i value;
+  Vector2f value;
 };
 
 struct Velocity {
-  Vector2i value;
+  Vector2f value;
 };
 
 struct RectShape {
-  IntRect value;
+  FloatRect value;
 };
 
 struct CircleShape {
-  IntCircle value;
+  FloatCircle value;
 };
 
 struct Color {
